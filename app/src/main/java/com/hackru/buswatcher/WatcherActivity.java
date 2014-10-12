@@ -38,6 +38,8 @@ public class WatcherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watcher);
+        ActionBar ab=getActionBar();
+        if (ab!=null) ab.hide();
         Intent intent = getIntent();
         watchingBus = intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX, -1);
         watchingStop = intent.getIntExtra(ChooseStopActivity.EXTRA_STOP_INDEX, -1);

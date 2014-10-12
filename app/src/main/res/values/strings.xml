@@ -7,14 +7,11 @@
     <string name="title_activity_watcher">WatcherActivity</string>
     <string name="bus_name">Q15</string>
     <string name="toggle_watcher">start watcher</string>
-    <string name="day_of_week">Wednsday</string>
-    <string name="date">12/05/2014</string>
-    <string name="time">12:00</string>
-    <string name="title_activity_choose_bus">ChooseBusActivity</string>
+
+    <string name="title_activity_choose_bus">Choose Bus Route</string>
     <string name="stop_left">5 stops left</string>
     <string name="no_data">no date</string>
-    <string name="title_selectactivity_list">Items</string>
-    <string name="title_selectactivity_detail">SelectActivity Detail</string>
-    <string name="title_activity_choose_stop">ChooseStopActivity</string>
+
+    <string name="title_activity_choose_stop">Choose Stop</string>
 
 </resources>
