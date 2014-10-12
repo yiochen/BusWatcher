@@ -3,8 +3,12 @@ package com.hackru.buswatcher;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +19,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.hackru.buswatcher.com.hackru.buswatcher.data.BusCollection;
+import com.hackru.buswatcher.com.hackru.buswatcher.data.Stop;
 import com.hackru.buswatcher.com.hackru.buswatcher.data.StopCollection;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class WatcherActivity extends Activity {
@@ -66,6 +75,41 @@ public class WatcherActivity extends Activity {
 
         private TextView busName;
         private TextView stopLeft;
+        private Timer timer;
+
+        private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i("MyActivity", "receiving data");
+                int length = intent.getIntExtra(GetDataService.LENField, 0);
+                int[] stop_ids = intent.getIntArrayExtra(GetDataService.STOP_IDS);
+                double[] latitudes = intent.getDoubleArrayExtra(GetDataService.LATITUDES);
+                double[] longitudes = intent.getDoubleArrayExtra(GetDataService.LONGITUDES);
+                int[] direction_ids = intent.getIntArrayExtra(GetDataService.DIRECTION_IDS);
+
+
+                int size = StopCollection.getInstance(getActivity(), watchingStop).getData().size();
+                ArrayList<Stop> allStops = StopCollection.getInstance(getActivity(), watchingStop).getData();
+                int[] currentStopIndex = new int[length];
+                for (int i = 0; i < size; i++) {
+                    for (int j = 0; j < length; j++) {
+                        if (Integer.parseInt(allStops.get(i).getCode()) == stop_ids[j])
+                            currentStopIndex[j] = i;
+                    }
+                }
+
+                int minStops = 100;
+                Log.i("WatchingActivity", "min stops:" + minStops);
+                for (int i : currentStopIndex) {
+                    if (Math.abs(watchingStop - i) < minStops)
+                        minStops = Math.abs(watchingStop - i);
+                }
+
+                stopLeft.setText(minStops + " stop from"+ StopCollection.getInstance(getActivity(),watchingBus).getData().get(watchingStop).getStreet());
+            }
+        };
+
         public PlaceholderFragment() {
         }
 
@@ -85,7 +129,8 @@ public class WatcherActivity extends Activity {
             });
             busName=(TextView)rootView.findViewById(R.id.text_bus_code);
             stopLeft=(TextView)rootView.findViewById(R.id.text_stop_left);
-           initializeWatch(watchingBus, watchingStop);
+
+            initializeWatch(watchingBus, watchingStop);
             return rootView;
         }
 
@@ -94,18 +139,40 @@ public class WatcherActivity extends Activity {
          */
 
         private void initializeWatch(int busIndex, int stopIndex){
-
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new FetchDataTask(), 0, 80000);
             //user already selected
             if (watchingBus>=0 && watchingStop>=0) {
                 busName.setText(BusCollection.getInstance(getActivity()).getData().get(busIndex).getNameString());
-                stopLeft.setText("5 stop from"+ StopCollection.getInstance(getActivity(),busIndex).getData().get(stopIndex).getStreet());
+                stopLeft.setText("5 stop from"+ StopCollection.getInstance(getActivity(),stopIndex).getData().get(stopIndex).getStreet());
             }
             else{
                 //user haven't selected
                 busName.setText("no bus");
                 stopLeft.setText("click start watcher to watch a bus");
             }
+        }
 
+        @Override
+        public void onResume() {
+            getActivity().registerReceiver(receiver, new IntentFilter(GetDataService.NOTIFICATION));
+        }
+
+        @Override
+        public void onPause() {
+            getActivity().unregisterReceiver(receiver);
+            timer.cancel();
+        }
+
+        class FetchDataTask extends TimerTask {
+
+            @Override
+            public void run() {
+                Intent intent = new Intent(getActivity(), GetDataService.class);
+                // add infos for the service which file to download and where to store
+                intent.putExtra(GetDataService.BUS_CODE, GetDataService.Q18);
+                getActivity().startService(intent);
+            }
         }
     }
 }
