@@ -65,9 +65,10 @@ public class ChooseBusActivity extends Activity {
 
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
-            watchingBus=BusCollection.getInstance().getData().get(position);
+            watchingBus=BusCollection.getInstance(getActivity()).getData().get(position);
             Intent intent=new Intent(getActivity(),ChooseStopActivity.class);
             intent.putExtra(EXTRA_BUS_INDEX,position);
+            startActivity(intent);
         }
 
         @Override
@@ -76,7 +77,7 @@ public class ChooseBusActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_choose_buses, container, false);
             ListView busList;
             busList = (ListView)rootView.findViewById(android.R.id.list);
-            busList.setAdapter(new BusAdapter(BusCollection.getInstance().getData()));
+            busList.setAdapter(new BusAdapter(BusCollection.getInstance(getActivity()).getData()));
             return rootView;
         }
 

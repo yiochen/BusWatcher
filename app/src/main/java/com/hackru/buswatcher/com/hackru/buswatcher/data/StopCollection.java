@@ -16,9 +16,9 @@ public class StopCollection {
     private static StopCollection mCollection;
     private static Activity activity;
 
-    private StopCollection() {
+    private StopCollection(int busCode) {
         stopList = new ArrayList<Stop>();
-        setStopData(1);
+        setStopData(busCode);
     }
 
 
@@ -58,12 +58,12 @@ public class StopCollection {
         return stopList;
     }
 
-    public static StopCollection getInstance(Activity activity) {
+    public static StopCollection getInstance(Activity activity,int busCode) {
         if (StopCollection.activity == null) {
             StopCollection.activity = activity;
         }
         if (mCollection == null) {
-            mCollection = new StopCollection();
+            mCollection = new StopCollection(busCode);
             return mCollection;
         } else return mCollection;
     }

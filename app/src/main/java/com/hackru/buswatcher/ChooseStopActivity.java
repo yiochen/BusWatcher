@@ -23,15 +23,16 @@ import java.util.ArrayList;
 
 
 public class ChooseStopActivity extends Activity {
-    static Stop choosingStop;
+    static private int busCode;
     private StopCollection stopCollection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent=getIntent();
-        int busPosition=intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX,0);
-        stopCollection.getInstance().
+        busCode=intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX,0);
+        stopCollection.getInstance(this,busCode);
         setContentView(R.layout.activity_choose_stop);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -70,7 +71,7 @@ public class ChooseStopActivity extends Activity {
 
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
-            choosingStop=StopCollection.getInstance().getData().get(position);
+
         }
 
         @Override
@@ -79,7 +80,7 @@ public class ChooseStopActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_choose_stop, container, false);
             ListView stopList;
             stopList=(ListView)rootView.findViewById(android.R.id.list);
-            stopList.setAdapter(new StopAdapter(StopCollection.getInstance().getData()));
+            stopList.setAdapter(new StopAdapter(StopCollection.getInstance(getActivity(),busCode).getData()));
             return rootView;
         }
         private class StopAdapter extends ArrayAdapter<Stop> {
@@ -95,7 +96,7 @@ public class ChooseStopActivity extends Activity {
                 }
                 Stop stop=getItem(position);
                 TextView stopName=(TextView) convertView.findViewById(R.id.list_item_stop_name);
-                stopName.setText(stop.getCode());
+                stopName.setText(stop.getStreet());
                 return convertView;
             }
         }
