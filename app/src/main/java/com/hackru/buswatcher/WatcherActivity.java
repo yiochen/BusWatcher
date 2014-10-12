@@ -12,14 +12,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.hackru.buswatcher.com.hackru.buswatcher.data.BusCollection;
+import com.hackru.buswatcher.com.hackru.buswatcher.data.StopCollection;
+
+import org.w3c.dom.Text;
 
 
 public class WatcherActivity extends Activity {
 
+    private static int watchingBus;
+    private static int watchingStop;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watcher);
+        Intent intent=getIntent();
+        watchingBus=intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX,-1);
+        watchingStop=intent.getIntExtra(ChooseStopActivity.EXTRA_STOP_INDEX,-1);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -52,6 +64,8 @@ public class WatcherActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private TextView busName;
+        private TextView stopLeft;
         public PlaceholderFragment() {
         }
 
@@ -60,6 +74,7 @@ public class WatcherActivity extends Activity {
                 Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_watcher, container, false);
+
             Button setWatcherButton=(Button)rootView.findViewById(R.id.button_toggle_watcher);
             setWatcherButton.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -68,7 +83,19 @@ public class WatcherActivity extends Activity {
                     startActivityForResult(intent,ChooseBusActivity.REQUEST_CODE);
                 }
             });
+            busName=(TextView)rootView.findViewById(R.id.text_bus_code);
+            stopLeft=(TextView)rootView.findViewById(R.id.text_stop_left);
+            if (watchingBus>=0 && watchingStop>=0) initializeWatch(watchingBus, watchingStop);
             return rootView;
+        }
+
+        /**
+         * use this method to initialize the watch
+         */
+
+        private void initializeWatch(int busIndex, int stopIndex){
+            busName.setText(BusCollection.getInstance(getActivity()).getData().get(busIndex).getNameString());
+            stopLeft.setText("5 stop from"+ StopCollection.getInstance(getActivity(),busIndex).getData().get(stopIndex).getStreet());
         }
     }
 }

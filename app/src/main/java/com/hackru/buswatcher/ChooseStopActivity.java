@@ -21,17 +21,20 @@ import com.hackru.buswatcher.com.hackru.buswatcher.data.StopCollection;
 
 import java.util.ArrayList;
 
+import static com.hackru.buswatcher.ChooseBusActivity.EXTRA_BUS_INDEX;
+
 
 public class ChooseStopActivity extends Activity {
     static private int busCode;
     private StopCollection stopCollection;
+    public static final String EXTRA_STOP_INDEX="extra stop index";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent=getIntent();
-        busCode=intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX,0);
+        busCode=intent.getIntExtra(EXTRA_BUS_INDEX,0);
         stopCollection.getInstance(this,busCode);
         setContentView(R.layout.activity_choose_stop);
         if (savedInstanceState == null) {
@@ -71,7 +74,10 @@ public class ChooseStopActivity extends Activity {
 
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
-
+            Intent intent=new Intent(getActivity(),WatcherActivity.class);
+            intent.putExtra(ChooseBusActivity.EXTRA_BUS_INDEX,busCode);
+            intent.putExtra(ChooseStopActivity.EXTRA_STOP_INDEX,position);
+            startActivity(intent);
         }
 
         @Override
