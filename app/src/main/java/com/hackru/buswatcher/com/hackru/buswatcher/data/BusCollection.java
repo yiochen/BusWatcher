@@ -1,5 +1,9 @@
 package com.hackru.buswatcher.com.hackru.buswatcher.data;
 
+import android.app.Activity;
+
+import com.hackru.buswatcher.R;
+
 import java.util.ArrayList;
 
 /**
@@ -9,6 +13,7 @@ import java.util.ArrayList;
 public class BusCollection {
     protected ArrayList<Bus> busList;
     private static BusCollection mCollection;
+    static Activity activity;
 
 
     private BusCollection(){
@@ -21,7 +26,10 @@ public class BusCollection {
      * The default implementation just uses some dummy data
      */
     protected void setBusData(){
-        for (int i=0;i<50;i++){
+        String[] buses = activity.getResources().getStringArray(R.array.buses);
+
+        busList.clear();
+        for (int i = 0; i < buses.length; i++) {
             busList.add(new Bus().setNameInt(i));
         }
     }
@@ -37,7 +45,10 @@ public class BusCollection {
      * return the instance of the manager class
      * @return
      */
-    public static BusCollection getInstance(){
+    public static BusCollection getInstance(Activity activity){
+        if (BusCollection.activity == null) {
+            BusCollection.activity = activity;
+        }
         if (mCollection==null) {
             mCollection=new BusCollection();
             return mCollection;

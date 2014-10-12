@@ -8,7 +8,7 @@ public class Bus {
     /**
      * The array of names of the buses
      */
-    public static final String[] BUS_NAMES = {"Q15", "Q17", "Q19"};
+    public static final String[] BUS_NAMES = {"Q18"};
 
     private int busName;//the index of the name user usually associate the bus with, for example, Q17.
 
