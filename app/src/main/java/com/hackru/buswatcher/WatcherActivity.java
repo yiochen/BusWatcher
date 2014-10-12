@@ -33,13 +33,14 @@ public class WatcherActivity extends Activity {
 
     private static int watchingBus;
     private static int watchingStop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watcher);
-        Intent intent=getIntent();
-        watchingBus=intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX,-1);
-        watchingStop=intent.getIntExtra(ChooseStopActivity.EXTRA_STOP_INDEX,-1);
+        Intent intent = getIntent();
+        watchingBus = intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX, -1);
+        watchingStop = intent.getIntExtra(ChooseStopActivity.EXTRA_STOP_INDEX, -1);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -106,7 +107,7 @@ public class WatcherActivity extends Activity {
                         minStops = Math.abs(watchingStop - i);
                 }
 
-                stopLeft.setText(minStops + " stop from"+ StopCollection.getInstance(getActivity(),watchingBus).getData().get(watchingStop).getStreet());
+                stopLeft.setText(minStops + " stop from" + StopCollection.getInstance(getActivity(), watchingBus).getData().get(watchingStop).getStreet());
             }
         };
 
@@ -115,20 +116,20 @@ public class WatcherActivity extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_watcher, container, false);
 
-            Button setWatcherButton=(Button)rootView.findViewById(R.id.button_toggle_watcher);
-            setWatcherButton.setOnClickListener(new View.OnClickListener(){
+            Button setWatcherButton = (Button) rootView.findViewById(R.id.button_toggle_watcher);
+            setWatcherButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(getActivity(),ChooseBusActivity.class);
-                    startActivityForResult(intent,ChooseBusActivity.REQUEST_CODE);
+                    Intent intent = new Intent(getActivity(), ChooseBusActivity.class);
+                    startActivityForResult(intent, ChooseBusActivity.REQUEST_CODE);
                 }
             });
-            busName=(TextView)rootView.findViewById(R.id.text_bus_code);
-            stopLeft=(TextView)rootView.findViewById(R.id.text_stop_left);
+            busName = (TextView) rootView.findViewById(R.id.text_bus_code);
+            stopLeft = (TextView) rootView.findViewById(R.id.text_stop_left);
 
             initializeWatch(watchingBus, watchingStop);
             return rootView;
@@ -138,15 +139,15 @@ public class WatcherActivity extends Activity {
          * use this method to initialize the watch
          */
 
-        private void initializeWatch(int busIndex, int stopIndex){
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new FetchDataTask(), 0, 80000);
+        private void initializeWatch(int busIndex, int stopIndex) {
+
             //user already selected
-            if (watchingBus>=0 && watchingStop>=0) {
+            if (watchingBus >= 0 && watchingStop >= 0) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new FetchDataTask(), 0, 80000);
                 busName.setText(BusCollection.getInstance(getActivity()).getData().get(busIndex).getNameString());
-                stopLeft.setText("5 stop from"+ StopCollection.getInstance(getActivity(),stopIndex).getData().get(stopIndex).getStreet());
-            }
-            else{
+                stopLeft.setText("5 stop from" + StopCollection.getInstance(getActivity(), stopIndex).getData().get(stopIndex).getStreet());
+            } else {
                 //user haven't selected
                 busName.setText("no bus");
                 stopLeft.setText("click start watcher to watch a bus");
@@ -155,13 +156,16 @@ public class WatcherActivity extends Activity {
 
         @Override
         public void onResume() {
+            super.onResume();
             getActivity().registerReceiver(receiver, new IntentFilter(GetDataService.NOTIFICATION));
+
         }
 
         @Override
         public void onPause() {
+            super.onPause();
             getActivity().unregisterReceiver(receiver);
-            timer.cancel();
+           if (timer!=null) timer.cancel();
         }
 
         class FetchDataTask extends TimerTask {
