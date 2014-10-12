@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--format: street, stop_id, longitude, latitudes -->
+    <string-array name="Q18">
+        <item>69 ST/GRAND AV,550579</item>
+        <item>69 ST/55 AV,550580</item>
+        <item>JAY AV/68 ST,550581</item>
+        <item>JAY AV/66 ST,550582</item>
+        <item>JAY AV/65 PL,550583</item>
+        <item>65 PL/CLARAN CT,550584</item>
+        <item>65 PL/53 AV,550585</item>
+        <item>53 AV/68 ST,550570</item>
+        <item>69 ST/52 DR,550586</item>
+        <item>69 ST/52 AV,550567</item>
+        <item>69 ST/CALAMUS AV,550587</item>
+        <item>69 ST/GARFIELD AV,550588</item>
+        <item>50 AV/67 ST,550563</item>
+        <item>50 AV/65 PL,550589</item>
+        <item>65 PL/48 AV,550560</item>
+        <item>65 PL/LAUREL HILL BL,550590</item>
+        <item>65 PL/QUEENS BL,550557</item>
+        <item>WOODSIDE AV/65 PL,550555</item>
+        <item>WOODSIDE AV/64 ST,550591</item>
+        <item>WOODSIDE AV/61 ST,550592</item>
+        <item>58 ST/WOODSIDE AV,550551</item>
+        <item>58 ST/38 AV,550593</item>
+        <item>58 ST/37 AV,552952</item>
+        <item>58 ST/BROADWAY,550594</item>
+        <item>BROADWAY/56 ST,550546</item>
+        <item>54 ST/NORTHERN BL,550546</item>
+        <item>54 ST/32 AV,550596</item>
+        <item>54 ST/31 AV,550597</item>
+        <item>HOBART ST/30 AV,550540</item>
+        <item>30 AV/49 ST,550538</item>
+        <item>30 AV/46 ST,550598</item>
+        <item>30 AV/44 ST,550599</item>
+        <item>30 AV/42 ST,550600</item>
+        <item>30 AV/STEINWAY ST,550533</item>
+        <item>30 AV/36 ST,550601</item>
+        <item>30 AV/34 ST,550602</item>
+        <item>30 AV/31 ST,550602</item>
+        <item>30 AV/29 ST,550526</item>
+        <item>30 AV/CRESCENT ST,550603</item>
+        <item>30 AV/21 ST,550523</item>
+        <item>30 AV/14 ST,550604</item>
+        <item>30 AV/12 ST,550605</item>
+        <item>8 ST/ASTORIA BL,552988</item>
+        <item>8 ST/27 AV,552989</item>
+        <item>27 AV/4 ST,552985</item>
+        <item>27 AV/2 ST,553049</item>
+    </string-array>
+</resources>
