@@ -85,7 +85,7 @@ public class WatcherActivity extends Activity {
             });
             busName=(TextView)rootView.findViewById(R.id.text_bus_code);
             stopLeft=(TextView)rootView.findViewById(R.id.text_stop_left);
-            if (watchingBus>=0 && watchingStop>=0) initializeWatch(watchingBus, watchingStop);
+           initializeWatch(watchingBus, watchingStop);
             return rootView;
         }
 
@@ -94,8 +94,18 @@ public class WatcherActivity extends Activity {
          */
 
         private void initializeWatch(int busIndex, int stopIndex){
-            busName.setText(BusCollection.getInstance(getActivity()).getData().get(busIndex).getNameString());
-            stopLeft.setText("5 stop from"+ StopCollection.getInstance(getActivity(),busIndex).getData().get(stopIndex).getStreet());
+
+            //user already selected
+            if (watchingBus>=0 && watchingStop>=0) {
+                busName.setText(BusCollection.getInstance(getActivity()).getData().get(busIndex).getNameString());
+                stopLeft.setText("5 stop from"+ StopCollection.getInstance(getActivity(),busIndex).getData().get(stopIndex).getStreet());
+            }
+            else{
+                //user haven't selected
+                busName.setText("no bus");
+                stopLeft.setText("click start watcher to watch a bus");
+            }
+
         }
     }
 }
