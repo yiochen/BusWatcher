@@ -23,15 +23,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ChooseBusActivity"
-            android:label="@string/title_activity_choose_bus" >
-        </activity>
 
         <service
             android:name=".GetDataService"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name=".ChooseBusActivity"
+            android:label="@string/title_activity_choose_bus" >
+        </activity>
+        <activity
+            android:name=".ChooseStopActivity"
+            android:label="@string/title_activity_choose_stop" >
+        </activity>
     </application>
 
 </manifest>

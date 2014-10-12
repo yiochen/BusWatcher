@@ -65,7 +65,7 @@ public class WatcherActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Intent intent=new Intent(getActivity(),ChooseBusActivity.class);
-                    startActivityForResult(intent,ChooseBusActivity.REQUEST_CHOICE);
+                    startActivityForResult(intent,ChooseBusActivity.REQUEST_CODE);
                 }
             });
             return rootView;

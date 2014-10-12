@@ -1,6 +1,8 @@
 package com.hackru.buswatcher;
 
 import android.app.Activity;
+import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,24 +11,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.os.Build;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hackru.buswatcher.com.hackru.buswatcher.data.Bus;
-import com.hackru.buswatcher.com.hackru.buswatcher.data.BusCollection;
+import com.hackru.buswatcher.com.hackru.buswatcher.data.Stop;
+import com.hackru.buswatcher.com.hackru.buswatcher.data.StopCollection;
 
 import java.util.ArrayList;
 
 
-public class ChooseBusActivity extends Activity {
-    public static final int REQUEST_CODE=1;
-    public static final String EXTRA_BUS_INDEX="extra bus index";
-    public static Bus watchingBus;
+public class ChooseStopActivity extends Activity {
+    static Stop choosingStop;
+    private StopCollection stopCollection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_buses);
+        Intent intent=getIntent();
+        int busPosition=intent.getIntExtra(ChooseBusActivity.EXTRA_BUS_INDEX,0);
+        stopCollection.getInstance().
+        setContentView(R.layout.activity_choose_stop);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
@@ -38,7 +44,7 @@ public class ChooseBusActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.choose_bus, menu);
+        getMenuInflater().inflate(R.menu.choose_stop, menu);
         return true;
     }
 
@@ -58,45 +64,42 @@ public class ChooseBusActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends ListFragment {
-        private ArrayList<Bus> mBuses;
-        private BusAdapter adapter;
+
         public PlaceholderFragment() {
         }
 
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
-            watchingBus=BusCollection.getInstance().getData().get(position);
-            Intent intent=new Intent(getActivity(),ChooseStopActivity.class);
-            intent.putExtra(EXTRA_BUS_INDEX,position);
+            choosingStop=StopCollection.getInstance().getData().get(position);
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_choose_buses, container, false);
-            ListView busList;
-            busList = (ListView)rootView.findViewById(android.R.id.list);
-            busList.setAdapter(new BusAdapter(BusCollection.getInstance().getData()));
+            View rootView = inflater.inflate(R.layout.fragment_choose_stop, container, false);
+            ListView stopList;
+            stopList=(ListView)rootView.findViewById(android.R.id.list);
+            stopList.setAdapter(new StopAdapter(StopCollection.getInstance().getData()));
             return rootView;
         }
-
-        private class BusAdapter extends ArrayAdapter<Bus>{
-            public BusAdapter(ArrayList<Bus> buses){
-                super(getActivity(),0,buses);
-
+        private class StopAdapter extends ArrayAdapter<Stop> {
+            public StopAdapter(ArrayList<Stop> stops){
+                super(getActivity(),0,stops);
             }
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView==null){
-                    convertView=getActivity().getLayoutInflater().inflate(R.layout.list_item_bus,null);
-                }
-                Bus bus=getItem(position);
-                TextView busName=(TextView)convertView.findViewById(R.id.list_item_bus_name);
-                busName.setText(bus.getNameString());
-                return convertView;
+                    convertView=getActivity().getLayoutInflater().inflate(R.layout.list_item_stop,null);
 
+                }
+                Stop stop=getItem(position);
+                TextView stopName=(TextView) convertView.findViewById(R.id.list_item_stop_name);
+                stopName.setText(stop.getCode());
+                return convertView;
             }
         }
+
+
     }
 }

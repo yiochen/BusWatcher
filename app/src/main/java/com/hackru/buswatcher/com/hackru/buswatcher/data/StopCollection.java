@@ -15,6 +15,7 @@ public class StopCollection {
         setStopData(1);
     }
 
+
     /**
      * modify this method to populate the stopList based on the busCode;
      * for example, if bus code is Q17, this method need to fill the stopList with all the stops in Q17 line.
